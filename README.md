@@ -6,17 +6,18 @@ Este repositório tem como objetivo ser um recurso complementar ao livro "Learni
 <p>
   
 ## Sobre o livro 
+The book "learning helm" is for who want to learn deploying pre-build applications, this book will guide you in utilizing Helm to achieve that. Installing applications via Helm is notably simpler and faster compared to the manual approach within kubernetes.
 
 ## Capitulo
 [Chapter 1 - Introducing Helm]()<br>
 [Chapter 2 - ]()<br>
 [Chapter 3 - ]()<br>
 [Chapter 4 - ]()<br>
-[Chapter 6 -  Terraform with friends]()<br>
+[Chapter 6 - ]()<br>
 
 
 ## Referencia
-- [Terraform in action](https://learning.oreilly.com/library/view/learning-helm/9781492083641/)
+- [Learning Helm](https://learning.oreilly.com/library/view/learning-helm/9781492083641/)
 
 ## Feito com ❤
   <table >
@@ -27,5 +28,3 @@ Este repositório tem como objetivo ser um recurso complementar ao livro "Learni
           <b>Guilherme Aguiar </b>
         </sub>
   </table>
-
-## 😄 Se você gostou deste repositório, deixe a sua estrela e siga-nos.<br>
