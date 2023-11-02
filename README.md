@@ -9,7 +9,7 @@ Este repositório tem como objetivo ser um recurso complementar ao livro "Learni
 The book "learning helm" is for who want to learn deploying pre-build applications, this book will guide you in utilizing Helm to achieve that. Installing applications via Helm is notably simpler and faster compared to the manual approach within kubernetes.
 
 ## Capitulo
-[Chapter 1 - Introducing Helm]()<br>
+[Chapter 1 - Introducing Helm](https://github.com/kadeguilherme/learning-helm/tree/main/chapter-1)<br>
 [Chapter 2 - ]()<br>
 [Chapter 3 - ]()<br>
 [Chapter 4 - ]()<br>
