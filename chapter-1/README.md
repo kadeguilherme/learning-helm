@@ -118,10 +118,11 @@ When we wrote Helm, we had three main goals:
 The goal of Helm has been to simplify the process of getting started with Kubernetes, allowing new users to download and install applications on an existing Kubernetes cluster in some minutes.
 
 Helm is not just a learning tool, it is a **package manager**. 
+***
 
 ## 2 Package Management
 The job of the package manager is to make it easy to find, install, upgrade, and delete the programs on an operating system.
-
+***
 ## 3 Security, Reusability and Configurability
  Security is a broad category. In this context, though, we are referring to the idea that when a user examines a package, the user has the ability to verify certain things about the package:
 
