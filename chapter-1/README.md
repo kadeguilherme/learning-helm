@@ -121,3 +121,42 @@ Helm is not just a learning tool, it is a **package manager**.
 
 ## 2 Package Management
 The job of the package manager is to make it easy to find, install, upgrade, and delete the programs on an operating system.
+
+## 3 Security, Reusability and Configurability
+ Security is a broad category. In this context, though, we are referring to the idea that when a user examines a package, the user has the ability to verify certain things about the package:
+
+- The package comes from a trusted source.
+
+- The network connection over which the package is pulled is secured.
+
+- The package has not been tampered with.
+
+- The package can be easily inspected so the user can see what it does.
+
+- The user can see what configuration the package has, and see how different inputs impact the output of a package.
+
+Helm provides a provenance feature to establish verification about a package’s origin, author, and integrity. Helm supports Secure Sockets Layer/Transport Layer Security (SSL/TLS) for securely sending data across the network. And Helm provides dry-run, template, and linting commands to examine packages and their possible permutations.
+***
+Reusability
+Helm charts are the key to reusability. A chart provides a template for generating the same Kubernetes manifests.
+***
+Configurability
+Helm provides patterns for talking a Helm chart and then supplying additional configuration. For example, install a WordPress with Helm.
+Helm is a package manager, not a configuration management tool, Configuration management are Puppet, Ansible and Chef.
+***
+
+# Helm's Architecture
+
+Charts
+In Helm's terminology, a package is referred to as a chart.<br>
+A chart is a set of files and directories that adhere to the chart specification for describing the resources to be installed into Kubernetes.<br>
+A chart contains a file called Chart.yaml that describes the chart. It has information about the chart version, the name and description of the chart, and who authored the chart.<br>
+A chart may also contain a values.yaml file that provides default configuration. This file contains parameters that you can override during installation and upgrade.
+
+# Resources, Installations, and Releases
+In summary, when Helm chart is installed in Kubernetes, this is the process that takes place
+
+1. Helm reads the chart(downloading if necessary).
+2. It sends the values into the templates, generating Kubernetes manifests. 
+3. The manifests are sent to Kubernetes.
+4. Kubernetes creates the requested resources inside of the cluster.
