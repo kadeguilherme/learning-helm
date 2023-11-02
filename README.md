@@ -10,7 +10,7 @@ The book "learning helm" is for who want to learn deploying pre-build applicatio
 
 ## Capitulo
 [Chapter 1 - Introducing Helm](https://github.com/kadeguilherme/learning-helm/tree/main/chapter-1)<br>
-[Chapter 2 - ]()<br>
+[Chapter 2 - Using Helm](https://github.com/kadeguilherme/learning-helm/tree/main/chapter-2)<br>
 [Chapter 3 - ]()<br>
 [Chapter 4 - ]()<br>
 [Chapter 6 - ]()<br>
