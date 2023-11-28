@@ -1,4 +1,4 @@
-# Chapter 2
+# Chapter 2 Using Helm
 
 ## Using Helm
 Helm provides a command-line tool, named ```helm``` that makes available all the features necessary for working with Helm charts. The o chapter will discover the primary features of the ```helm``` client.
@@ -273,3 +273,68 @@ $ helm upgrade mysite bitnami/drupal --reuse-values
 ```
 
 The **--reuse-values** flag will tell Helm to reload the server-side copy of the last set of values, and then use those to generate the upgrade. This method is okay if you are always just reusing the same values.However, the Helm maintainers strongly suggest not trying to mix **--reuse-values** with additional **--set** or **--values options**. 
+
+
+### 6 - Uninstalling an Installation
+To remove a Helm installation, use the helm uninstall command:
+
+```bash
+$ helm uninstall mysite
+```
+Note that this command does not need a chart name (bitnami/drupal) or any configuration files. It simply needs the name of the installation.
+
+You can supply a --namespace flag to specify that you want to delete an installation from a specific namespace:
+
+```bash
+$ helm uninstall mysite --namespace first
+```
+
+### How Helm Stores Release Information
+When we first install a chart with Helm (such as with **helm install mysite bitnami/drupal**), we create the Drupal application instance, and we also create a special record that contains release information. By default, Helm stores these records as **Kubernetes Secrets** (though there are other supported storage backends).
+
+We can see these records with kubectl get secret:
+
+```bash
+$ kubectl get secret
+NAME                           TYPE                                  DATA   AGE
+default-token-vjhx2            kubernetes.io/service-account-token   3      58m
+mysite-drupal                  Opaque                                1      13m
+mysite-mariadb                 Opaque                                2      13m
+sh.helm.release.v1.mysite.v1   helm.sh/release.v1                    1      13m
+sh.helm.release.v1.mysite.v2   helm.sh/release.v1                    1      13m
+sh.helm.release.v1.mysite.v3   helm.sh/release.v1                    1      7m53s
+sh.helm.release.v1.mysite.v4   helm.sh/release.v1                    1      5m30s
+```
+We can see multiple release records at the bottom, one for each revision. As you can see, we have created four revisions of mysite by running install and upgrade operations.
+
+When we run the command **helm uninstall mysite**, it will load the latest release record for the **mysite** installation. From that record, it will assemble a list of objects that it should remove from Kubernetes. Then Helm will delete all of those things before returning and deleting the four release records:
+
+```bash
+$ helm uninstall mysite
+release "mysite" uninstalled
+```
+
+The helm list command will no is show mysite:
+
+```bash
+$ helm list
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+
+```
+
+We now have no installations. And if we rerun the **kubectl get secrets** command, we will also see all records of **mysite** have been purged:
+
+```
+$ kubectl get secrets
+NAME                  TYPE                                  DATA   AGE
+default-token-vjhx2   kubernetes.io/service-account-token   3      65m
+```
+
+As we can see from this output, it's evident that not only were the two Secrets created by the Drupal chart deleted, but also the four release records were removed.
+
+However, you can delete the application while retaining the release records.
+
+```bash
+$ helm uninstall --keep-history
+```
+In Helm 2, history was retained by default. In Helm 3, the default was changed to deleting history.
