@@ -155,3 +155,121 @@ Subsections are a little more complicated when using the --set flag. You will ne
 Helm core maintainers recommend storing configurations primarily in files like values.yaml, discouraging excessive use of the --set option.
 ***
 ### 4 - Listing Your Installations
+The helm list command is a simple tool to help you see installations and learn about those installations:
+ 
+ ```bash
+$ helm list
+```
+Output:
+```YAML
+NAME    NAMESPACE  REVISION  UPDATED       STATUS    CHART           APP VERSION
+mysite  default    1         2020-06-14... deployed  drupal-7.0.0    9.0.0
+ ```
+
+This command will provide you with lots of usefull information, including the name and namespace of the release, the current revision number, the last time it was updated, the installation status and the versions of the chart and app. 
+
+By defaulft, Helm uses the namespace your Kubernetrs configuration file sets as the default. Usually this is the namespace named **default**. Earlier, we installed a Drupal instance into the namespace **first**. We can see that with helm list **--namespace first**
+
+When listing all of your releases, one useful flag is the **--all-namespaces** flag, which will query all of the Kubernetes namespaces to which you have permission, and return all of the releases it finds
+
+### 5 - Upgrading an Installation
+
+When we talk about upgrading in Helm, we talk about upgrading an installation, not a chart.
+An installation is a particular instance of a chart in your cluster. When you run **helm install**, it creates the installation. To modify that installation, use **helm upgrade**
+
+This is an important distinction to make in the present context because upgrading an installation can consist of two different kinds of changes:
+
+- You can upgrade the version of the chart
+
+- You can upgrade the configuration of the installation
+
+The two are not mutually exclusive; you can do both at the same time. But this does introduce one new term that Helm users refer to when talking about their systems: a release is a particular combination of configuration and chart version for an installation
+
+When first install a chart, we create the initial release of an installation. Will call this release 1. When we perform an upgrade, we are creating a *new release* of the same installation: release2, doing upgrade again, we will create release 3.
+During an upgrade, then, we can create a release with new configuration, with a new chart version, or with both.
+
+For example, we install the Drupal chart with the **ingress** turned off.
+
+The flag **--set** to keep examples easy,but would recommend using a values.yaml file in regular scenarios:
+
+```bash
+$ helm install mysite bitnami/drupal --set ingress.enabled=false
+```
+
+With **ingress** turned off, we can work on configuring our site according to our preferences. Then we are ready for create a new release that enables the **ingress** feature:
+
+```bash
+$ helm upgrade mysite bitnami/drupal --set ingress.enabled=true
+```
+
+In this case, we are running an upgrade that will only change the configuration.
+
+In the background, Helm will load the chart, generate all of the Kubernetes objects in that chart, and then see how those differ from the version of the chart that is already installed. It will only send Kubernetes the things that need to change. In other words, Helm will attempt to alter only the minimum.
+
+It is worth noting that we only changes the **ingress** configuration. Nothing changes with the database, or even with the web server running Drupal. For that reason, nothing will be restarded or deleted and recreated.
+
+
+
+On occasion, you may want to force one of your services to restart. This is not something you need to use Helm. You can use **kubectl** itself to restart things. You don’t need to use Helm to restart your web server or database
+
+When a new version of a chart is release, you may want to upgrade your existing installation to use the new chart version. The Helm make this easy:
+
+```bash
+$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "bitnami" chart repository
+Update Complete. ⎈ Happy Helming!⎈
+```
+Fetch the latest packages from chart repositories.
+
+```bash
+$ helm upgrade mysite bitnami/drupal
+```
+Upgrade the mysite release to use the latest version of bitnami/drupal.
+
+The default policy of Helm is to attempt to use the latest version of a chart. However, if you wish to use a specific version of a chart, you can explicitly declare this.
+
+```bash
+$ helm upgrade mysite bitnami/drupal --version 6.2.22
+```
+In this case, even if a newer version is released, only bitnaim/drupal version 6.2.22 will be installed.
+
+
+### Configuration Values and Upgrades
+
+Understand the importance of Helm installations and upgrades by utilizing the configuration file *values.yaml*. Here’s a quick illustration:
+
+```bash
+$ helm install mysite bitnami/drupal --values values.yaml
+```
+Install using a configuration file.
+
+```bash
+$ helm upgrade mysite bitnami/drupal
+```
+Upgrade without a configuration file.
+
+What is the result of this pair of operations? The installation will use all of the configuration data supplied in values.yaml, but the upgrade will not. As a result, some settings could be changed back to their defaults. This is usually not what you want.
+
+Helm core maintainers suggest that you provide consistent configuration with each installation and upgrade. To apply the same configuration to both releases, supply the values on each operation:
+
+```bash
+$ helm install mysite bitnami/drupal --values values.yaml
+```
+Install using a configuration file.
+
+```bash
+$ helm upgrade mysite bitnami/drupal --values values.yaml 
+```
+Upgrade using the same configuration file.
+
+Storing configuration in a values.yaml file is recommended for ease of reproduction. Using **--set** for multiple configuration parameters would be cumbersome, requiring precise recall of settings for each release.
+
+
+There is an upgrade shortcut available that will just reuse the last set of values that you sent:
+
+```bash
+$ helm upgrade mysite bitnami/drupal --reuse-values
+```
+
+The **--reuse-values** flag will tell Helm to reload the server-side copy of the last set of values, and then use those to generate the upgrade. This method is okay if you are always just reusing the same values.However, the Helm maintainers strongly suggest not trying to mix **--reuse-values** with additional **--set** or **--values options**. 
