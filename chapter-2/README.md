@@ -1,4 +1,4 @@
-# Chapter 2 Using Helm
+# Chapter 2 - Using Helm
 
 ## Using Helm
 Helm provides a command-line tool, named ```helm``` that makes available all the features necessary for working with Helm charts. The o chapter will discover the primary features of the ```helm``` client.

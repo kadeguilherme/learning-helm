@@ -1,4 +1,4 @@
-# Chapter 1
+# Chapter 1 - Introduction Helm
 
 ## Introduction Helm
 Helm is a popular package manager and deployment tool for Kubernetes, designed to simplify the management of containerized applications within a Kubernetes cluster. It helps users define, install, and upgrade even the most complex Kubernetes applications with ease. Helm provides a way to package applications and their dependencies into a single unit called a "chart," which is a collection of files and templates describing a set of Kubernetes resources. These charts can then be shared and easily deployed to different Kubernetes clusters.
